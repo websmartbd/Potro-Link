@@ -39,7 +39,7 @@ bot.start(async (ctx) => {
     ctx.session.step = 'waitingForFullName'; // Set state to waiting for full name
   } else {
     // If user exists, show their link
-    await ctx.reply(`Your Potro Link page is available at: http://localhost/${user.username}`, createMainMenu(true));
+    await ctx.reply(`Your Potro Link page is available at: ${config.BASE_URL}/${user.username}`, createMainMenu(true));
     ctx.session.step = 'idle'; // Reset state
   }
 });
@@ -70,7 +70,7 @@ bot.hears('🔗 Get My Link', async (ctx) => {
     return;
   }
   
-  const url = `http://localhost/${user.username}`;
+  const url = `${config.BASE_URL}/${user.username}`;
   await ctx.reply(
     `Your Potro Link page is available at:\n<a href="${url}">${url}</a>`,
     { 
@@ -160,7 +160,7 @@ bot.on('photo', async (ctx) => {
                 return;
             }
 
-            const serverUrl = `http://localhost:${config.PORT}`;
+            const serverUrl = config.BASE_URL;
             const response = await fetch(`${serverUrl}/api/${user.username}/update-profile`, {
                 method: 'POST',
                 headers: {
@@ -260,8 +260,8 @@ bot.on('text', async (ctx) => {
                     return;
                 }
 
-                // Use the /api/register endpoint
-                const serverUrl = `http://localhost:${config.PORT}`;
+                // Use the /api/register endpoint with dynamic URL
+                const serverUrl = config.BASE_URL;
                 const response = await fetch(`${serverUrl}/api/register`, {
                     method: 'POST',
                     headers: {
