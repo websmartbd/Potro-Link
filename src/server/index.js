@@ -13,6 +13,12 @@ app.use('/views', express.static(path.join(__dirname, '../views')));
 // Initialize bot for notifications
 const bot = new Telegraf(config.BOT_TOKEN);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
 // Add route for thank you page
 app.get('/thank-you', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/thank-you.html'));
@@ -20,20 +26,20 @@ app.get('/thank-you', (req, res) => {
 
 // Add new endpoint for user registration
 app.post('/api/register', async (req, res) => {
-  const { fullName, telegramId, username, imagePath } = req.body;
-
-  if (!fullName || !telegramId || !username) {
-    return res.status(400).json({ error: 'Full name, Telegram ID, and username are required' });
-  }
-
   try {
-    // Check if username is already taken (double-check on server-side)
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-       return res.status(400).json({ error: 'Username is already taken' });
+    const { fullName, telegramId, username, imagePath } = req.body;
+
+    if (!fullName || !telegramId || !username) {
+      return res.status(400).json({ error: 'Full name, Telegram ID, and username are required' });
     }
 
-    // Create new user using the JSON file utility
+    // Check if username is already taken
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Username is already taken' });
+    }
+
+    // Create new user
     const user = await User.create({
       username,
       fullName,
@@ -47,7 +53,7 @@ app.post('/api/register', async (req, res) => {
       fullName: user.fullName
     });
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error('Error in /api/register:', error);
     res.status(500).json({ error: 'Failed to register user' });
   }
 });
@@ -141,7 +147,4 @@ app.post('/api/:username/update-profile', async (req, res) => {
   }
 });
 
-const PORT = config.PORT;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-}); 
+module.exports = app; 
