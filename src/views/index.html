@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Use Potro Link to send anonymous letters.">
+    <meta name="keywords" content="Potro, Potro Link, anonymous letters, send letters, user letters, secret messages">
+    <meta name="author" content="Potro">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <link rel="canonical" href="https://potro.link/">
+   
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Send Anonymous Letter">
+    <meta property="og:description" content="Use Potro Link to send an anonymous letter.">
+    <meta property="og:image" content="assets/img/potro-previw.png">
+    <meta property="og:url" content="https://potro.link/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Send Anonymous Letter">
+    <meta name="twitter:description" content="Use Potro Link to send an anonymous letter.">
+    <meta name="twitter:image" content="assets/img/potro-previw.png">
+    <meta name="twitter:url" content="https://potro.link/">
+
+    <link rel="shortcut icon" href="https://potro.link/assets/img/favicon.png" type="image/png">
+    <link rel="icon" href="https://potro.link/assets/img/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://potro.link/assets/img/favicon.png">
+
+    <title>Send Anonymous Letter</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="https://potro.link/assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Custom Fonts -->
+    <style>
+        @font-face {
+            font-family: 'BanglaFont';
+            src: url('https://text-to-handwriting-maker.vercel.app/fonts/Bangla_Font.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'EnglishFont';
+            src: url('https://text-to-handwriting-maker.vercel.app/fonts/English-4.ttf') format('truetype');
+        }
+
+        textarea {
+            font-family: 'EnglishFont', sans-serif;
+        }
+
+        textarea::placeholder {
+            font-family: 'EnglishFont', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-r from-[#e9defa] to-[#abced4]">
+    <!-- Avatar Section -->
+    <div class="flex justify-center items-center my-6">
+        <div class="w-24 h-24 overflow-hidden rounded-xl bg-gradient-to-br from-primary-200 to-primary-300 md:w-28 md:h-28">
+            <img id="userAvatar" src="" alt="Avatar" class="w-full h-full object-cover rounded-xl border-2 border-blue-600">
+        </div>
+
+        <div class="ml-4 text-center">
+            <div id="userName" class="font-semibold text-xl text-left"></div>
+            <div class="text-gray-600">Send me anonymous letters!</div>
+        </div>
+    </div>
+
+    <!-- Notebook Paper -->
+    <div id="notebook-paper" class="max-w-2xl mx-auto">
+        <form id="messageForm" class="space-y-4">
+            <textarea 
+                id="message"
+                name="message" 
+                rows="10" 
+                placeholder="Write your anonymous letter..." 
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </textarea>
+        </form>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-2">
+        <button type="submit" form="messageForm" 
+            class="bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 py-2 rounded-md hover:from-purple-600 hover:to-purple-700 transition duration-200 inline-flex items-center justify-center space-x-2">
+            <i class="fas fa-heart text-white"></i>
+            <span>Send Letter</span>
+        </button>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="mt-4 text-center text-green-600 hidden">
+        Message sent successfully!
+    </div>
+
+    <!-- New Button -->
+    <div class="text-center mt-8 mb-8">
+        <h2 class="text-2xl font-bold mb-6">Want to get letters too?</h2>
+        <div class="space-y-4">
+            <a href="https://potro.link/" 
+                class="bg-gradient-to-r from-green-400 to-green-600 text-white px-10 py-3 rounded-xl hover:from-green-500 hover:to-green-700 transition duration-200 inline-flex items-center justify-center space-x-2 text-lg max-w-[200px]">
+                <i class="fas fa-globe text-white"></i>
+                <span> Website</span>
+            </a>
+            <a href="https://t.me/potro_link_bot" 
+                class="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-10 py-3 rounded-xl hover:from-blue-500 hover:to-blue-700 transition duration-200 inline-flex items-center justify-center space-x-2 text-lg max-w-[200px]">
+                <i class="fab fa-telegram text-white"></i>
+                <span>Start Bot</span>
+            </a>
+        </div>
+        <p class="mt-6 text-gray-700">
+            <span class="font-semibold text-purple-600">Potro</span>
+            is the best app to receive
+            <span class="font-semibold text-purple-600">anonymous letters</span>, with multiple themes and many different
+            features!
+        </p>
+    </div>
+
+    <script>
+        const username = window.location.pathname.split('/').pop();
+        
+        // Fetch user profile information
+        async function fetchUserProfile() {
+            try {
+                console.log('Fetching profile for username:', username);
+                const response = await fetch(`/api/${username}/profile`);
+                const data = await response.json();
+                console.log('Received profile data:', data);
+                
+                // Update avatar
+                const avatarElement = document.getElementById('userAvatar');
+                if (data.photoUrl) {
+                    console.log('Attempting to load image from URL:', data.photoUrl);
+                    // Create a new image object to test if the URL is valid
+                    const img = new Image();
+                    img.onload = () => {
+                        console.log('Image loaded successfully');
+                        avatarElement.src = data.photoUrl;
+                    };
+                    img.onerror = (e) => {
+                        console.error('Image failed to load:', e);
+                        console.error('Failed URL:', data.photoUrl);
+                        avatarElement.src = 'https://m.potro.link/assets/profiles/default-profile.png';
+                    };
+                    img.src = data.photoUrl;
+                } else {
+                    console.log('No photo URL in response, using default avatar');
+                    avatarElement.src = 'https://m.potro.link/assets/profiles/default-profile.png';
+                }
+                
+                // Update name
+                const nameElement = document.getElementById('userName');
+                if (data.name) {
+                    nameElement.textContent = data.name;
+                    console.log('Setting name:', data.name);
+                } else {
+                    nameElement.textContent = username;
+                    console.log('Using username as name:', username);
+                }
+            } catch (error) {
+                console.error('Error in fetchUserProfile:', error);
+                console.error('Error details:', error.message);
+                // Set default values on error
+                document.getElementById('userAvatar').src = 'https://m.potro.link/assets/profiles/default-profile.png';
+                document.getElementById('userName').textContent = username;
+            }
+        }
+
+        // Call fetchUserProfile when page loads
+        fetchUserProfile();
+        
+        // Handle form submission
+        document.getElementById('messageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = document.getElementById('message').value;
+            
+            try {
+                const response = await fetch(`/api/${username}/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message }),
+                });
+                
+                if (response.ok) {
+                    // Redirect to thank you page
+                    window.location.href = '/thank-you';
+                } else {
+                    console.error('Error sending message:', await response.text());
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        });
+
+        // Auto font switching
+        const textarea = document.getElementById('message');
+        textarea.addEventListener('input', () => {
+            const text = textarea.value;
+            const banglaPattern = /[\u0980-\u09FF]/; // Unicode range for Bangla characters
+
+            if (banglaPattern.test(text)) {
+                textarea.style.fontFamily = 'BanglaFont';
+                textarea.style.fontSize = '20px';
+            } else {
+                textarea.style.fontFamily = 'EnglishFont';
+                textarea.style.fontSize = '20px';
+            }
+        });
+
+        // Remove any default value (including whitespace) from the textarea
+        textarea.value = '';
+    </script>
+</body>
+</html> 
